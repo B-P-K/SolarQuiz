@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SolarQuiz</string>
+    <string name="statistics">Statistics</string>
+    <string name="quiz">Quiz</string>
+</resources>
