@@ -1,6 +1,7 @@
 package ch.ost.rj.mge.solarquiz.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,13 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import ch.ost.rj.mge.solarquiz.R;
+import ch.ost.rj.mge.solarquiz.database.BodyWithKeyValues;
+import ch.ost.rj.mge.solarquiz.database.SolarBody;
+import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
+import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                                          @Override
                                          public void onClick(View v) {
 
-                                             loadSolarApiIntoMemory();
+                                             requestAllBodiesFromApi();
 
                                          }
                                      }
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    public void loadSolarApiIntoMemory() {
+    public void requestAllBodiesFromApi() {
         String url = "https://api.le-systeme-solaire.net/rest/bodies";
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -60,5 +67,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         queue.add(request);
+    }
+
+    public void setupDb() {
+        SolarDatabase db = Room.databaseBuilder(getApplicationContext(),
+                SolarDatabase.class, "database-name").build();
+        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        List<BodyWithKeyValues> solarBodies = solarBodyDao.getAll();
     }
 }
