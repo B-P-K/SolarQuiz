@@ -9,14 +9,14 @@ import java.util.List;
 public class BodyWithKeyValues {
     @Embedded
     SolarBody body;
-    /* FIXME
+
     @Relation(
             parentColumn = "id",
             entityColumn = "key",
             associateBy = @Junction(BodyKeyValueCrossref.class)
     )
-    KeyValue[] aroundPlanet; // key: planet, val: rel
-    */
+    List<KeyValue> aroundPlanet; // key: planet, val: rel
+
     @Relation(
             parentColumn = "id",
             entityColumn = "key",
