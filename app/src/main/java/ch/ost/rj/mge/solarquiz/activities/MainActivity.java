@@ -16,15 +16,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import ch.ost.rj.mge.solarquiz.R;
-import ch.ost.rj.mge.solarquiz.database.BodyWithKeyValues;
-import ch.ost.rj.mge.solarquiz.database.SolarBody;
+import ch.ost.rj.mge.solarquiz.database.KeyValue;
+import ch.ost.rj.mge.solarquiz.database.Mass;
+import ch.ost.rj.mge.solarquiz.database.SolarBodyComplete;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
+import ch.ost.rj.mge.solarquiz.database.SolarBodyValues;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
+import ch.ost.rj.mge.solarquiz.database.Volume;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,13 +45,18 @@ public class MainActivity extends AppCompatActivity {
                                          @Override
                                          public void onClick(View v) {
 
-                                             requestAllBodiesFromApi();
 
                                          }
                                      }
 
         );
+
+        requestAllBodiesFromApi();
+
+
+
     }
+
 
     public void requestAllBodiesFromApi() {
         String url = "https://api.le-systeme-solaire.net/rest/bodies";
@@ -56,7 +67,18 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+                        //Toast.makeText(getApplicationContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+
+                        try {
+                            Toast.makeText(getApplicationContext(), "Begin parsing", Toast.LENGTH_LONG).show();//display the response on screen
+                            List<SolarBodyComplete> solarBodies = parseJsonToObjects(response);
+                            Toast.makeText(getApplicationContext(), "Parsed done", Toast.LENGTH_LONG).show();//display the response on screen
+                            setupDb(solarBodies);
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(), "FAIL", Toast.LENGTH_LONG).show();//display the response on screen
+                            Log.e("JSON FAILURE", e.toString(),e);
+                        }
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -69,10 +91,108 @@ public class MainActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    public void setupDb() {
-        SolarDatabase db = Room.databaseBuilder(getApplicationContext(),
-                SolarDatabase.class, "database-name").build();
-        SolarBodyDao solarBodyDao = db.solarBodyDao();
-        List<BodyWithKeyValues> solarBodies = solarBodyDao.getAll();
+    public List<SolarBodyComplete> parseJsonToObjects(JSONObject json) throws JSONException {
+        JSONArray bodiesJsonArr = json.getJSONArray("bodies");
+        List<SolarBodyComplete> solarBodies = new LinkedList<>();
+        for(int i = 0; i < bodiesJsonArr.length(); i++) {
+            JSONObject bodyJson = bodiesJsonArr.getJSONObject(i);
+
+            // Add value types
+            SolarBodyValues solarBodyVal = parseJsonToSolarBodyValuesPojo(bodyJson);
+
+            // Add reference types
+            SolarBodyComplete solarBodyComplete = new SolarBodyComplete();
+            solarBodyComplete.setBody(solarBodyVal);
+            if(!json.isNull("moons")) {
+                List<KeyValue> moons = parseJsonMoonArrToList(bodyJson.getJSONArray("moons"));
+                solarBodyComplete.setMoons(moons);
+            }
+
+            solarBodies.add(solarBodyComplete);
+        }
+        return solarBodies;
     }
+
+    public KeyValue parseJsonAroundPlanetToPojo(JSONObject aroundPlanetJson) throws JSONException {
+        KeyValue aroundPlanet = new KeyValue();
+        aroundPlanet.setKey(aroundPlanetJson.getString("planet"));
+        aroundPlanet.setVal(aroundPlanetJson.getString("rel"));
+        return aroundPlanet;
+    }
+
+    public List<KeyValue> parseJsonMoonArrToList(JSONArray moonJsonArr) throws JSONException {
+        LinkedList<KeyValue> moons = new LinkedList<>();
+        for(int i = 0; i < moonJsonArr.length(); i++) {
+            KeyValue currMoon = new KeyValue();
+            if  (moonJsonArr.getJSONObject(i) != null) {
+                currMoon.setKey(moonJsonArr.getJSONObject(i).getString("moon"));
+                currMoon.setVal(moonJsonArr.getJSONObject(i).getString("rel"));
+                moons.add(currMoon);
+            }
+        }
+        if(moons.isEmpty())
+            return null;
+        return moons;
+    }
+
+    public Mass parseJsonMassToPojo(JSONObject massJsonObj) throws JSONException {
+        Mass mass = new Mass();
+        mass.setMassValue(massJsonObj.getInt("massValue"));
+        mass.setMassExponent(massJsonObj.getInt("massExponent"));
+        return mass;
+    }
+
+    public Volume parseJsonVolumeToPojo(JSONObject volJsonObj) throws JSONException {
+        Volume vol = new Volume();
+        vol.setVolValue(volJsonObj.getInt("volValue"));
+        vol.setVolExponent(volJsonObj.getInt("volExponent"));
+        return vol;
+    }
+
+    public SolarBodyValues parseJsonToSolarBodyValuesPojo(JSONObject bodyJson) throws JSONException {
+        SolarBodyValues solarBodyVal = new SolarBodyValues();
+        solarBodyVal.setId(bodyJson.getString("id"));
+        solarBodyVal.setName(bodyJson.getString("name"));
+        solarBodyVal.setEnglishName(bodyJson.getString("englishName"));
+        solarBodyVal.setPlanet(bodyJson.getBoolean("isPlanet"));
+        solarBodyVal.setInclination(bodyJson.getInt("inclination"));
+        solarBodyVal.setDensity(bodyJson.getInt("density"));
+        solarBodyVal.setGravity(bodyJson.getInt("gravity"));
+        solarBodyVal.setMeanRadius(bodyJson.getInt("meanRadius"));
+        solarBodyVal.setEquaRadius(bodyJson.getInt("equaRadius"));
+        solarBodyVal.setDimension(bodyJson.getString("dimension"));
+        solarBodyVal.setDiscoveredBy(bodyJson.getString("discoveredBy"));
+        solarBodyVal.setDiscoveryDate(bodyJson.getString("discoveryDate"));
+        solarBodyVal.setAvgTemp(bodyJson.getInt("avgTemp"));
+        solarBodyVal.setRel(bodyJson.getString("rel"));
+
+        // build embedded objects
+        if(!bodyJson.isNull("mass")) {
+            Mass mass = parseJsonMassToPojo(bodyJson.getJSONObject("mass"));
+            solarBodyVal.setMass(mass);
+        }
+        if(!bodyJson.isNull("aroundPlanet")) {
+            KeyValue aroundPlanet = parseJsonAroundPlanetToPojo(bodyJson.getJSONObject("aroundPlanet"));
+            solarBodyVal.setAroundPlanet(aroundPlanet);
+        }
+        if(!bodyJson.isNull("vol")) {
+            Volume volume = parseJsonVolumeToPojo(bodyJson.getJSONObject("vol"));
+            solarBodyVal.setVol(volume);
+        }
+        return solarBodyVal;
+    }
+
+    public void setupDb(List<SolarBodyComplete> solarBodies) {
+        // FIXME DO NOT RUN IN MAIN THREAD
+        SolarDatabase db = Room.databaseBuilder(getApplicationContext(),
+                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
+        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        for(SolarBodyComplete sbc : solarBodies) {
+            solarBodyDao.addSolarBodyComplete(sbc);
+        }
+        Toast.makeText(getApplicationContext(), "INSERTS INTO DB DONE", Toast.LENGTH_LONG).show();//display the response on screen
+
+    }
+
+
 }
