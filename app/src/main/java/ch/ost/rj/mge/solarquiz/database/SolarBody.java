@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class SolarBodyValues {
+public class SolarBody {
     // Incomplete, the api provides more attributes
     @PrimaryKey @NonNull
     String id;
@@ -18,8 +18,8 @@ public class SolarBodyValues {
     Mass mass;
     @Embedded
     Volume vol;
-    @Embedded(prefix="aroundPlanet")
-    KeyValue aroundPlanet;
+    @Embedded(prefix="around_planet_")
+    Planet aroundPlanet;
     int density;
     int gravity;
     int meanRadius;
@@ -66,11 +66,11 @@ public class SolarBodyValues {
         this.mass = mass;
     }
 
-    public KeyValue getAroundPlanet() {
+    public Planet getAroundPlanet() {
         return aroundPlanet;
     }
 
-    public void setAroundPlanet(KeyValue aroundPlanet) {
+    public void setAroundPlanet(Planet aroundPlanet) {
         this.aroundPlanet = aroundPlanet;
     }
 

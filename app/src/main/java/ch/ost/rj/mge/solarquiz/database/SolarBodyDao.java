@@ -4,40 +4,45 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
-import java.security.Key;
 import java.util.List;
 
 @Dao
 public abstract class SolarBodyDao {
 
-    public void addSolarBodyComplete(SolarBodyComplete sbc) {
+    // FIXME
+    public void addSolarBodyWithMoons(SolarBodyWithMoons sbm) {
+        if(sbm.getMoons() != null) {
+            addAllMoons(sbm.getMoons());
+        }
+        addSolarBody(sbm.getBody());
+
+        /*
         String bodyId = sbc.getBody().getId();
-        List<KeyValue> moons = sbc.getMoons();
+        List<Moon> moons = sbc.getMoons();
         if(moons != null) {
             addAllMoons(moons);
-            for (KeyValue moon : moons) {
-                BodyKeyValueCrossref bkvc = new BodyKeyValueCrossref();
+            for (Moon moon : moons) {
                 bkvc.setId(bodyId);
-                bkvc.setKey(moon.getKey());
+                bkvc.setKey(moon.getMoon());
                 addCrossRefs(bkvc);
             }
         }
 
         // Todo maybe move this up if foreing key constraints are violated
         addValueBody(sbc.getBody());
+        */
     }
 
-    @Query("SELECT * FROM SolarBodyValues")
-    abstract List<SolarBodyComplete> getAll();
+    @Transaction
+    @Query("SELECT * FROM SolarBody")
+    abstract List<SolarBodyWithMoons> getAll();
 
     // FIXME Insert?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void addAllMoons(List<KeyValue> moons);
+    abstract void addAllMoons(List<Moon> moons);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    abstract void addValueBody(SolarBodyValues sbv);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void addCrossRefs(BodyKeyValueCrossref bkvc);
+    abstract void addSolarBody(SolarBody sbv);
 }
