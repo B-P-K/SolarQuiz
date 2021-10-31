@@ -24,6 +24,7 @@ import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 import ch.ost.rj.mge.solarquiz.helper.JsonHelper;
 
 public class App extends Application {
+    public static SolarDatabase db;
 
     @Override
     public void onCreate() {
@@ -62,20 +63,11 @@ public class App extends Application {
 
         // FIXME DO NOT RUN IN MAIN THREAD
         // FIXME OFFLINE PERSISTENCE! WHAT IF API UNREACHABLE?
-        SolarDatabase db = Room.databaseBuilder(getApplicationContext(),
+        db = Room.databaseBuilder(getApplicationContext(),
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
         SolarBodyDao solarBodyDao = db.solarBodyDao();
         for(SolarBodyWithMoons sbc : solarBodies) {
             solarBodyDao.addSolarBodyWithMoons(sbc);
         }
-
-        List<SolarBodyWithMoons> smb1 = solarBodyDao.getAll();
-        for(SolarBodyWithMoons s : smb1) {
-            Log.i("MGE", s.getMoons().toString());
-            if(s.getMoons() != null) {
-                Log.i("MGE", s.getBody().getId() + " has moons");
-            }
-        }
-        Log.i("MGE", "done");
     }
 }

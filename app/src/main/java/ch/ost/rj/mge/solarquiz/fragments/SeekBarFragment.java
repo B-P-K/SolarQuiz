@@ -25,7 +25,8 @@ public class SeekBarFragment extends Fragment {
     SeekBar sb;
     TextView sbValueTextView;
     DataInterface dataPasser;
-    public int max;
+    public int stepSize;
+    public int startValue;
 
     public SeekBarFragment() {
         // Required empty public constructor
@@ -35,7 +36,8 @@ public class SeekBarFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            max = getArguments().getInt("max");
+            stepSize = getArguments().getInt("stepSize");
+            startValue = getArguments().getInt("startValue");
         }
     }
 
@@ -52,7 +54,9 @@ public class SeekBarFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress,
         boolean fromUser) {
-            sbValueTextView.setText(Integer.toString(progress));
+            //Log.i("hello", Integer.toString(startValue));
+            //Log.i("hello", Integer.toString(stepSize));
+            sbValueTextView.setText(Integer.toString(startValue + progress * stepSize));
         }
     };
 
@@ -60,7 +64,6 @@ public class SeekBarFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         dataPasser = (DataInterface) context;
-        dataPasser.onResult("PASS SUCCESSFUL"); // Pass result back to activity
     }
 
     @Override
@@ -71,7 +74,7 @@ public class SeekBarFragment extends Fragment {
         sb = (SeekBar) view.findViewById(R.id.seekBar);
         sbValueTextView = (TextView)view.findViewById(R.id.seekBarValueText);
         sb.setOnSeekBarChangeListener(sbl);
-        sb.setMax(max);
+        sb.setMax(9);
         return view;
     }
 }
