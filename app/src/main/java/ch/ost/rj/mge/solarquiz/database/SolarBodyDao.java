@@ -14,30 +14,17 @@ public abstract class SolarBodyDao {
     // FIXME
     public void addSolarBodyWithMoons(SolarBodyWithMoons sbm) {
         if(sbm.getMoons() != null) {
+            for(Moon moon : sbm.getMoons()) {
+                moon.setSolarBodyId(sbm.getBody().getId());
+            }
             addAllMoons(sbm.getMoons());
         }
         addSolarBody(sbm.getBody());
-
-        /*
-        String bodyId = sbc.getBody().getId();
-        List<Moon> moons = sbc.getMoons();
-        if(moons != null) {
-            addAllMoons(moons);
-            for (Moon moon : moons) {
-                bkvc.setId(bodyId);
-                bkvc.setKey(moon.getMoon());
-                addCrossRefs(bkvc);
-            }
-        }
-
-        // Todo maybe move this up if foreing key constraints are violated
-        addValueBody(sbc.getBody());
-        */
     }
 
     @Transaction
     @Query("SELECT * FROM SolarBody")
-    abstract List<SolarBodyWithMoons> getAll();
+    public abstract List<SolarBodyWithMoons> getAll();
 
     // FIXME Insert?
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -9,6 +9,7 @@ public class Moon {
     @PrimaryKey @NonNull
     String moon;
     String rel;
+    String solarBodyId; // used as fk
 
     @NonNull
     public String getMoon() {
@@ -25,5 +26,13 @@ public class Moon {
 
     public void setRel(String rel) {
         this.rel = rel;
+    }
+
+    public String getSolarBodyId() {
+        return solarBodyId;
+    }
+
+    public void setSolarBodyId(String solarBodyId) {
+        this.solarBodyId = solarBodyId;
     }
 }

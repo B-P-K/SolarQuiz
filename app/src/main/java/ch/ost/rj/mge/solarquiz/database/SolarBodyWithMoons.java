@@ -11,7 +11,7 @@ public class SolarBodyWithMoons {
 
     @Relation(
             parentColumn = "id",
-            entityColumn = "moon"
+            entityColumn = "solarBodyId"
     )
     List<Moon> moons; // key: moon, val: rel
 

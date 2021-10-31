@@ -37,24 +37,16 @@ public class App extends Application {
 
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Toast.makeText(getApplicationContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
-
                         try {
-                            Toast.makeText(getApplicationContext(), "Begin parsing", Toast.LENGTH_LONG).show();//display the response on screen
                             List<SolarBodyWithMoons> solarBodies = JsonHelper.parseJsonToObjects(response);
-                            Toast.makeText(getApplicationContext(), "Parsed done", Toast.LENGTH_LONG).show();//display the response on screen
                             setupDb(solarBodies);
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), "FAIL", Toast.LENGTH_LONG).show();//display the response on screen
                             Log.e("JSON FAILURE", e.toString(),e);
                         }
-
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
@@ -64,18 +56,26 @@ public class App extends Application {
         queue.add(request);
     }
 
-
-
     public void setupDb(List<SolarBodyWithMoons> solarBodies) {
-        this.deleteDatabase("database-name");
+        // TODO Remove this once data scheme is fix and app programming is complete
         this.deleteDatabase("solar-db");
 
         // FIXME DO NOT RUN IN MAIN THREAD
+        // FIXME OFFLINE PERSISTENCE! WHAT IF API UNREACHABLE?
         SolarDatabase db = Room.databaseBuilder(getApplicationContext(),
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
         SolarBodyDao solarBodyDao = db.solarBodyDao();
         for(SolarBodyWithMoons sbc : solarBodies) {
             solarBodyDao.addSolarBodyWithMoons(sbc);
         }
+
+        List<SolarBodyWithMoons> smb1 = solarBodyDao.getAll();
+        for(SolarBodyWithMoons s : smb1) {
+            Log.i("MGE", s.getMoons().toString());
+            if(s.getMoons() != null) {
+                Log.i("MGE", s.getBody().getId() + " has moons");
+            }
+        }
+        Log.i("MGE", "done");
     }
 }
