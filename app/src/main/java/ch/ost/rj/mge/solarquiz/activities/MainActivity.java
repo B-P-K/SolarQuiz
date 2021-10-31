@@ -34,6 +34,7 @@ import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 import ch.ost.rj.mge.solarquiz.database.Volume;
 
 public class MainActivity extends AppCompatActivity {
+    // NOTE DO NOT USE THIS; IMPORT THE NECESSARY CODE INTO OTHER ACTIVITY
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
