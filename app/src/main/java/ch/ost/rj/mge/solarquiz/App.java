@@ -59,7 +59,7 @@ public class App extends Application {
 
     public void setupDb(List<SolarBodyWithMoons> solarBodies) {
         // TODO Remove this once data scheme is fix and app programming is complete
-        this.deleteDatabase("solar-db");
+        // this.deleteDatabase("solar-db");
 
         // FIXME DO NOT RUN IN MAIN THREAD
         // FIXME OFFLINE PERSISTENCE! WHAT IF API UNREACHABLE?

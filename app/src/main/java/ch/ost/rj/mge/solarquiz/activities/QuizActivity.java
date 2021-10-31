@@ -2,12 +2,19 @@ package ch.ost.rj.mge.solarquiz.activities;
 
 import java.util.Random;
 import java.lang.*;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -22,17 +29,19 @@ import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
-
+    TextView questionTextView;
+    Random generator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-
+        questionTextView = findViewById(R.id.questionTextView);
         // TODO Generate question
         // TODO Set fragment based on question (and pass params if necessary)
         // TODO Return user input from fragment
         // TODO Validate user input
         // TODO Show result
+        generator = new Random();
         generateSliderQuestion();
     }
 
@@ -42,10 +51,13 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         SolarBodyDao solarBodyDao = db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWithMeanRadiusBiggerThan(0);
         // FIXME Empty list returned
-        int randOne = ThreadLocalRandom.current().nextInt(0,sbm.size() + 1);
-        int randTwo = ThreadLocalRandom.current().nextInt(0,sbm.size() + 1);
+        Log.i("hello", Integer.toString(sbm.size()));
+        int randOne = generator.nextInt(sbm.size());
+        int randTwo = generator.nextInt(sbm.size());
+        Log.i("hello", Integer.toString(randOne) + "randOne");
+        Log.i("hello", Integer.toString(randTwo) + "randTwo");
         while(randOne == randTwo) {
-            randTwo = ThreadLocalRandom.current().nextInt(0,sbm.size() + 1);
+            randTwo = ThreadLocalRandom.current().nextInt(sbm.size());
         }
 
         SolarBodyWithMoons sbOne;
@@ -59,12 +71,12 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
             sbOne = sbm.get(randTwo);
         }
 
-        String question = "How much bigger is the mean radius of " + sbOne.getBody().getId() + " than " +
+        String question = "How much bigger is the mean radius of " + sbOne.getBody().getId() + " than that of " +
                     sbTwo.getBody().getId() + "? Round your answer down.";
+        questionTextView.setText(question);
 
         int answer = sbOne.getBody().getMeanRadius() / sbTwo.getBody().getMeanRadius();
         Log.i("hello", Integer.toString(answer) + "answer");
-        Random generator = new Random();
         int step = (int) Math.pow(10, Math.floor(Math.log10(answer)));
         Log.i("hello", Integer.toString(step) + "step");
         int answerPlacement = generator.nextInt(Math.min(10,answer/step));
