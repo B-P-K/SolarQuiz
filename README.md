@@ -34,9 +34,9 @@ Usage of the Solar System OpenData API. Requests are sent through Volley.
 For more information click [here](https://api.le-systeme-solaire.net/en).
 
 ## Screenshots
-![Single Choice Question](./Screenshots/SingleChoiceQuestion.png)
-![Slider Question](./Screenshots/SliderQuestion.png)
-![TextView Question](./Screenshots/TextViewQuestion.png)
-![Correct Answer](./Screenshots/CorrectAnswer.png)
-![Wrong Answer](./Screenshots/WrongAnswer.png)
-![Offline Capabilities](./Screenshots/OfflineCapabilities.png)
+![Single Choice Question](./Screenshots/SingleChoiceQuestion.jpeg)
+![Slider Question](./Screenshots/SliderQuestion.jpeg)
+![TextView Question](./Screenshots/TextViewQuestion.jpeg)
+![Correct Answer](./Screenshots/CorrectAnswer.jpeg)
+![Wrong Answer](./Screenshots/WrongAnswer.jpeg)
+![Offline Capabilities](./Screenshots/OfflineCapabilities.jpeg)
