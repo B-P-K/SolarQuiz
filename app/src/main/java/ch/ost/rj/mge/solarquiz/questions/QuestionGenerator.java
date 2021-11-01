@@ -59,7 +59,11 @@ public class QuestionGenerator {
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWhereDiscoveredByIsNotNull();
         int rand = generator.nextInt(sbm.size());
         String question = "Who discovered " + sbm.get(rand).getBody().getEnglishName() + "?";
-        TextViewQuestion textViewQuestion = new TextViewQuestion(question, sbm.get(rand).getBody().getDiscoveredBy());
+        String discoveredBy= sbm.get(rand).getBody().getDiscoveredBy();
+        if (discoveredBy == null || discoveredBy.equals("")) {
+            discoveredBy = "no one";
+        }
+        TextViewQuestion textViewQuestion = new TextViewQuestion(question, discoveredBy);
         return textViewQuestion;
     }
 
