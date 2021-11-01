@@ -20,8 +20,4 @@ public class TextViewQuestion extends Question {
     public String getCorrectAnswer() {
         return correctAnswer;
     }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
 }

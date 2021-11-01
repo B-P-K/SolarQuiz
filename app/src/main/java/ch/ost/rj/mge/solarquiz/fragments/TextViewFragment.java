@@ -59,7 +59,6 @@ public class TextViewFragment extends Fragment {
 
     View.OnClickListener confirmButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
-            // Do something in response to button click
             textViewQuestion.setUserGuessText(userGuessEditTextField.getText().toString());
             String correctAnswer = textViewQuestion.getCorrectAnswer();
             String userGuess = textViewQuestion.getUserGuessText();

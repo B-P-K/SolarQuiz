@@ -14,11 +14,6 @@ import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 import ch.ost.rj.mge.solarquiz.questions.SingleChoiceQuestion;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SingleChoiceFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SingleChoiceFragment extends Fragment {
     private static final String ARG_SINGLE_CHOICE_QUESTION = "SingleChoiceQuestion";
     private SingleChoiceQuestion singleChoiceQuestion;
@@ -53,7 +48,6 @@ public class SingleChoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_single_choice, container, false);
         Button[] singleChoiceBtns = new Button[4];
         singleChoiceBtns[0] = view.findViewById(R.id.singleChoiceBtn1);
@@ -68,7 +62,6 @@ public class SingleChoiceFragment extends Fragment {
         return view;
     }
 
-    // TODO
     View.OnClickListener answerButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             // Must use if/else rather than switch, as id's are non-final

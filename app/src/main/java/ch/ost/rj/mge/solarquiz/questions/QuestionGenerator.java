@@ -21,7 +21,6 @@ public class QuestionGenerator {
         generator = new Random();
         SolarBodyDao solarBodyDao = App.db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWithMeanRadiusBiggerThan(0);
-        // FIXME Empty list returned
         int randOne = generator.nextInt(sbm.size());
         int randTwo = generator.nextInt(sbm.size());
         while(randOne == randTwo) {
@@ -77,19 +76,15 @@ public class QuestionGenerator {
     }
 
     public static SingleChoiceQuestion generateSingleChoiceQuestion(Context context) {
-        Random generator = new Random();
+        generator = new Random();
         SolarBodyDao solarBodyDao = App.db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAll();
 
         List<SolarBodyWithMoons> planets = solarBodyDao.getAllBodiesWhereIsPlanet(true);
         List<SolarBodyWithMoons> moons = solarBodyDao.getAllBodiesWhereIsPlanet(false);
 
-        generator = new Random();
-
-
         String[] answerChoices = new String[4];
         int correctAnswerIndex = generator.nextInt(4);
-
 
         for(int i = 0; i < answerChoices.length; i++) {
             int randIndex1;
@@ -109,7 +104,6 @@ public class QuestionGenerator {
             }
         }
 
-        int rand = generator.nextInt(sbm.size());
         String question = "Which one of these solar bodies is a (dwarf) planet?";
         SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(question, correctAnswerIndex, answerChoices);
         return singleChoiceQuestion;

@@ -53,7 +53,6 @@ public class App extends Application {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
                         Log.e("Error", error.toString());
                         db = Room.databaseBuilder(getApplicationContext(),
                                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
@@ -68,10 +67,7 @@ public class App extends Application {
     }
 
     public void setupDb(List<SolarBodyWithMoons> solarBodies) {
-        // TODO Remove this once data scheme is fix and app programming is complete
-        // this.deleteDatabase("solar-db");
-
-        // FIXME DO NOT RUN IN MAIN THREAD
+        // FIXME IN PRODUCTION: DO NOT RUN IN MAIN THREAD
         // FIXME OFFLINE PERSISTENCE! WHAT IF API UNREACHABLE?
         db = Room.databaseBuilder(getApplicationContext(),
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();

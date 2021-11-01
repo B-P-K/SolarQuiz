@@ -23,15 +23,7 @@ public class SingleChoiceQuestion extends Question {
         return correctAnswerButtonIndex;
     }
 
-    public void setCorrectAnswerButtonIndex(int correctAnswerButtonIndex) {
-        this.correctAnswerButtonIndex = correctAnswerButtonIndex;
-    }
-
     public String[] getAnswerChoices() {
         return answerChoices;
-    }
-
-    public void setAnswerChoices(String[] answerChoices) {
-        this.answerChoices = answerChoices;
     }
 }

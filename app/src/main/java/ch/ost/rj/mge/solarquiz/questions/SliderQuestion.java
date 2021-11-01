@@ -25,28 +25,8 @@ public class SliderQuestion extends Question {
         return startValue;
     }
 
-    public void setStartValue(int startValue) {
-        this.startValue = startValue;
-    }
-
     public int getStepSize() {
         return stepSize;
-    }
-
-    public void setStepSize(int stepSize) {
-        this.stepSize = stepSize;
-    }
-
-    public int getCorrectAnswerPlacement() {
-        return correctAnswerPlacement;
-    }
-
-    public void setCorrectAnswerPlacement(int correctAnswerPlacement) {
-        this.correctAnswerPlacement = correctAnswerPlacement;
-    }
-
-    public int getUserGuessPlacement() {
-        return userGuessPlacement;
     }
 
     public void setUserGuessPlacement(int userGuessPlacement) {

@@ -7,19 +7,11 @@ public class Question implements Serializable {
     String dialogText;
     String dialogTitle;
 
-    public Question(String questionText) {
-        this.questionText = questionText;
-    }
-
     public Question() {
     }
 
     public String getQuestionText() {
         return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
     }
 
     public String getDialogText() {
