@@ -57,11 +57,10 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
     public void showAnswerDialog(Question question) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ImageView image = new ImageView(this);
-        // Read your drawable from somewhere
         Drawable dr = getResources().getDrawable(R.drawable.astronaut_false);
         Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-// Scale it to 50 x 50
-        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
+        // FIXME DO NOT USE PIXELS; use relative size
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 300, true));
         image.setImageDrawable(d);
         builder.setView(image).setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
