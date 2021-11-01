@@ -1,10 +1,4 @@
-package ch.ost.rj.mge.solarquiz.helper;
-
-import android.content.DialogInterface;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.appcompat.app.AlertDialog;
+package ch.ost.rj.mge.solarquiz.questions;
 
 import java.io.Serializable;
 

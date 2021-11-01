@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
-import ch.ost.rj.mge.solarquiz.helper.SliderQuestion;
+import ch.ost.rj.mge.solarquiz.questions.SliderQuestion;
 
 public class SeekBarFragment extends Fragment {
     SeekBar sb;

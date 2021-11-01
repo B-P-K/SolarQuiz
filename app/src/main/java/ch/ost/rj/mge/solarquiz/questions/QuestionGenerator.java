@@ -1,7 +1,6 @@
-package ch.ost.rj.mge.solarquiz.helper;
+package ch.ost.rj.mge.solarquiz.questions;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.room.Room;
 

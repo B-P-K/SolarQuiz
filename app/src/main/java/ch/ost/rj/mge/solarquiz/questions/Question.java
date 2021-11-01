@@ -1,4 +1,4 @@
-package ch.ost.rj.mge.solarquiz.helper;
+package ch.ost.rj.mge.solarquiz.questions;
 
 public class Question {
     String questionText;

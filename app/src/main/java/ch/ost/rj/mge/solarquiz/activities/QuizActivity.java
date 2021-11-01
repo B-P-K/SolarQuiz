@@ -13,9 +13,9 @@ import android.widget.TextView;
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
-import ch.ost.rj.mge.solarquiz.helper.Question;
-import ch.ost.rj.mge.solarquiz.helper.QuestionGenerator;
-import ch.ost.rj.mge.solarquiz.helper.SliderQuestion;
+import ch.ost.rj.mge.solarquiz.questions.Question;
+import ch.ost.rj.mge.solarquiz.questions.QuestionGenerator;
+import ch.ost.rj.mge.solarquiz.questions.SliderQuestion;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
     TextView questionTextView;
