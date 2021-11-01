@@ -98,20 +98,15 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         builder.setMessage(answer)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+                        // TODO Generate next question
                     }
                 });
-        // Create the AlertDialog object and return it
         builder.create().show();
     }
 
     public void startSliderFragment(int stepSize, int startValue) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SeekBarFragment slider = new SeekBarFragment();
-        Bundle args = new Bundle();
-        args.putInt("stepSize", stepSize);
-        args.putInt("startValue", startValue); // TODO
-        slider.setArguments(args);
+        SeekBarFragment slider = SeekBarFragment.newInstance(startValue, stepSize);
         ft.replace(R.id.fragmentContainerView, slider);
         ft.commit();
     }

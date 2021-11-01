@@ -16,12 +16,6 @@ import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 
 public class SeekBarFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     SeekBar sb;
     TextView sbValueTextView;
     DataInterface dataPasser;
@@ -30,6 +24,15 @@ public class SeekBarFragment extends Fragment {
 
     public SeekBarFragment() {
         // Required empty public constructor
+    }
+
+    public static SeekBarFragment newInstance(int startValue, int stepSize) {
+        SeekBarFragment slider = new SeekBarFragment();
+        Bundle args = new Bundle();
+        args.putInt("stepSize", stepSize);
+        args.putInt("startValue", startValue);
+        slider.setArguments(args);
+        return slider;
     }
 
     @Override
