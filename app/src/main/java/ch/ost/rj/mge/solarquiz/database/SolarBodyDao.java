@@ -24,6 +24,9 @@ public abstract class SolarBodyDao {
     @Query("select * from SolarBody where meanRadius > :meanRadius")
     public abstract List<SolarBodyWithMoons> getAllWithMeanRadiusBiggerThan(int meanRadius);
 
+    @Query("select * from SolarBody where discoveredBy is not null")
+    public abstract List<SolarBodyWithMoons> getAllWhereDiscoveredByIsNotNull();
+
     @Transaction
     @Query("SELECT * FROM SolarBody")
     public abstract List<SolarBodyWithMoons> getAll();

@@ -1,26 +1,24 @@
 package ch.ost.rj.mge.solarquiz.questions;
 
-import java.io.Serializable;
-
-public class SliderQuestion extends Question implements Serializable {
+public class SliderQuestion extends Question {
     int startValue;
     int stepSize;
-    int answerPlacement;
+    int correctAnswerPlacement;
     int userGuessPlacement;
 
-    public SliderQuestion(String questionText, int startValue, int stepSize, int answerPlacement) {
+    public SliderQuestion(String questionText, int startValue, int stepSize, int correctAnswerPlacement) {
         this.questionText = questionText;
         this.startValue = startValue;
         this.stepSize = stepSize;
-        this.answerPlacement = answerPlacement;
+        this.correctAnswerPlacement = correctAnswerPlacement;
     }
 
     public int getUserGuessValue() {
         return startValue + stepSize * userGuessPlacement;
     }
 
-    public int getAnswerValue() {
-        return startValue + stepSize * answerPlacement;
+    public int getCorrectAnswerValue() {
+        return startValue + stepSize * correctAnswerPlacement;
     }
 
     public int getStartValue() {
@@ -39,12 +37,12 @@ public class SliderQuestion extends Question implements Serializable {
         this.stepSize = stepSize;
     }
 
-    public int getAnswerPlacement() {
-        return answerPlacement;
+    public int getCorrectAnswerPlacement() {
+        return correctAnswerPlacement;
     }
 
-    public void setAnswerPlacement(int answerPlacement) {
-        this.answerPlacement = answerPlacement;
+    public void setCorrectAnswerPlacement(int correctAnswerPlacement) {
+        this.correctAnswerPlacement = correctAnswerPlacement;
     }
 
     public int getUserGuessPlacement() {

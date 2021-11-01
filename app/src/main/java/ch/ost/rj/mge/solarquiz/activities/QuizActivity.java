@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
+import ch.ost.rj.mge.solarquiz.fragments.TextViewFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 import ch.ost.rj.mge.solarquiz.questions.Question;
 import ch.ost.rj.mge.solarquiz.questions.QuestionGenerator;
 import ch.ost.rj.mge.solarquiz.questions.SliderQuestion;
+import ch.ost.rj.mge.solarquiz.questions.TextViewQuestion;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
     TextView questionTextView;
@@ -25,7 +27,14 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         questionTextView = findViewById(R.id.questionTextView);
-        showSliderQuestion();
+        //showSliderQuestion();
+        showTextViewQuestion();
+    }
+
+    public void showTextViewQuestion() {
+        TextViewQuestion textViewQuestion = QuestionGenerator.generateTextViewQuestion(getApplicationContext());
+        questionTextView.setText(textViewQuestion.getQuestionText());
+        startTextViewFragment(textViewQuestion);
     }
 
     public void showSliderQuestion() {
@@ -41,7 +50,7 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
 
     public void showAnswerDialog(Question question) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(question.getAnswerText()).setTitle(question.getAnswerTitle())
+        builder.setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO Generate next question
@@ -55,6 +64,13 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         SeekBarFragment slider = SeekBarFragment.newInstance(sliderQuestion);
         ft.replace(R.id.fragmentContainerView, slider);
+        ft.commit();
+    }
+
+    public void startTextViewFragment(TextViewQuestion textViewQuestion) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        TextViewFragment textViewFragment = TextViewFragment.newInstance(textViewQuestion);
+        ft.replace(R.id.fragmentContainerView, textViewFragment);
         ft.commit();
     }
 }

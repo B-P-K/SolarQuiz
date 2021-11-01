@@ -24,7 +24,7 @@ public class QuestionGenerator {
         int randOne = generator.nextInt(sbm.size());
         int randTwo = generator.nextInt(sbm.size());
         while(randOne == randTwo) {
-            randTwo = ThreadLocalRandom.current().nextInt(sbm.size());
+            randTwo = generator.nextInt(sbm.size());
         }
 
         SolarBodyWithMoons sbOne;
@@ -47,5 +47,17 @@ public class QuestionGenerator {
         int answerPlacement = generator.nextInt(Math.min(10,answer/step));
 
         return new SliderQuestion(question,answer - answerPlacement * step, step, answerPlacement);
+    }
+
+    public static TextViewQuestion generateTextViewQuestion(Context context) {
+        Random generator = new Random();
+        SolarDatabase db = Room.databaseBuilder(context,
+                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
+        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWhereDiscoveredByIsNotNull();
+        int rand = generator.nextInt(sbm.size());
+        String question = "Who discovered " + sbm.get(rand).getBody().getEnglishName() + "?";
+        TextViewQuestion textViewQuestion = new TextViewQuestion(question, sbm.get(rand).getBody().getDiscoveredBy());
+        return textViewQuestion;
     }
 }

@@ -1,11 +1,18 @@
 package ch.ost.rj.mge.solarquiz.questions;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
     String questionText;
-    String answerText;
-    String answerTitle;
+    String dialogText;
+    String dialogTitle;
 
+    public Question(String questionText) {
+        this.questionText = questionText;
+    }
 
+    public Question() {
+    }
 
     public String getQuestionText() {
         return questionText;
@@ -15,19 +22,19 @@ public class Question {
         this.questionText = questionText;
     }
 
-    public String getAnswerText() {
-        return answerText;
+    public String getDialogText() {
+        return dialogText;
     }
 
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
+    public void setDialogText(String dialogText) {
+        this.dialogText = dialogText;
     }
 
-    public String getAnswerTitle() {
-        return answerTitle;
+    public String getDialogTitle() {
+        return dialogTitle;
     }
 
-    public void setAnswerTitle(String answerTitle) {
-        this.answerTitle = answerTitle;
+    public void setDialogTitle(String dialogTitle) {
+        this.dialogTitle = dialogTitle;
     }
 }
