@@ -11,9 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SolarQuiz">
         <activity
-            android:name=".activities.StatisticsActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.QuizActivity"
             android:exported="true">
             <intent-filter>
