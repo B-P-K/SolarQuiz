@@ -13,9 +13,10 @@ import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 
 public class QuestionGenerator {
+    static Random generator;
 
     public static SliderQuestion generateSliderQuestion(Context context) {
-        Random generator = new Random();
+        generator = new Random();
         SolarDatabase db = Room.databaseBuilder(context,
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
         SolarBodyDao solarBodyDao = db.solarBodyDao();
@@ -59,5 +60,39 @@ public class QuestionGenerator {
         String question = "Who discovered " + sbm.get(rand).getBody().getEnglishName() + "?";
         TextViewQuestion textViewQuestion = new TextViewQuestion(question, sbm.get(rand).getBody().getDiscoveredBy());
         return textViewQuestion;
+    }
+
+    public static SingleChoiceQuestion generateSingleChoiceQuestion(Context context) {
+        Random generator = new Random();
+        SolarDatabase db = Room.databaseBuilder(context,
+                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
+        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        List<SolarBodyWithMoons> sbm = solarBodyDao.getAll();
+
+        List<SolarBodyWithMoons> planets = solarBodyDao.getAllBodiesWhereIsPlanet(true);
+        List<SolarBodyWithMoons> moons = solarBodyDao.getAllBodiesWhereIsPlanet(false);
+
+        generator = new Random();
+
+
+        String[] answerChoices = new String[4];
+        int correctAnswerIndex = generator.nextInt(4);
+
+
+        for(int i = 0; i < answerChoices.length; i++) {
+            int randIndex1;
+            if (i == correctAnswerIndex) {
+                randIndex1 = generator.nextInt(planets.size());
+                answerChoices[i] = planets.get(randIndex1).getBody().getEnglishName();
+            } else {
+                randIndex1 = generator.nextInt(moons.size());
+                answerChoices[i] = moons.get(randIndex1).getBody().getEnglishName();
+            }
+        }
+
+        int rand = generator.nextInt(sbm.size());
+        String question = "Which one of these solar bodies is NOT a moon?";
+        SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(question, correctAnswerIndex, answerChoices);
+        return singleChoiceQuestion;
     }
 }

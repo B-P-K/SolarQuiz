@@ -27,6 +27,12 @@ public abstract class SolarBodyDao {
     @Query("select * from SolarBody where discoveredBy is not null")
     public abstract List<SolarBodyWithMoons> getAllWhereDiscoveredByIsNotNull();
 
+    @Query("select solarBodyId from (select solarBodyId, count(*) as c from Moon group by solarBodyId having c >= 3)")
+    public abstract List<String> getSolarBodyIdsWithAtleast3Moons();
+
+    @Query("select * from SolarBody where isPlanet = :isPlanet")
+    public abstract List<SolarBodyWithMoons> getAllBodiesWhereIsPlanet(boolean isPlanet);
+
     @Transaction
     @Query("SELECT * FROM SolarBody")
     public abstract List<SolarBodyWithMoons> getAll();

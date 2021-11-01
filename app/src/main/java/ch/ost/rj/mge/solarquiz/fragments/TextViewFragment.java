@@ -18,8 +18,8 @@ import ch.ost.rj.mge.solarquiz.questions.TextViewQuestion;
 public class TextViewFragment extends Fragment {
     private static final String ARG_TEXTVIEW_QUESTION = "TextViewQuestion";
     private TextViewQuestion textViewQuestion;
-    EditText userGuessEditTextField;
-    DataInterface dataPasser;
+    private EditText userGuessEditTextField;
+    private DataInterface dataPasser;
 
     public TextViewFragment() {
         // Required empty public constructor
