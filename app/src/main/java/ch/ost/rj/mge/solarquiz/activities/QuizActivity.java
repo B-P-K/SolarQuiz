@@ -20,6 +20,7 @@ import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.fragments.SingleChoiceFragment;
 import ch.ost.rj.mge.solarquiz.fragments.TextViewFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
+import ch.ost.rj.mge.solarquiz.helper.DialogHelper;
 import ch.ost.rj.mge.solarquiz.questions.Question;
 import ch.ost.rj.mge.solarquiz.questions.QuestionGenerator;
 import ch.ost.rj.mge.solarquiz.questions.SingleChoiceQuestion;
@@ -66,13 +67,9 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
     // TODO Set image based on answer correctness
     public void showAnswerDialog(Question question) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ImageView image = new ImageView(this);
-        Drawable dr = getResources().getDrawable(R.drawable.astronaut_false);
-        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-        // FIXME DO NOT USE PIXELS; use relative size
-        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 300, true));
-        image.setImageDrawable(d);
-        builder.setView(image).setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
+        ImageView astronaut = DialogHelper.getAppropriateAstronautImage(this, question.getDialogTitle());
+
+        builder.setView(astronaut).setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO Generate next question
