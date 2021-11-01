@@ -3,34 +3,31 @@ package ch.ost.rj.mge.solarquiz.activities;
 import java.util.Random;
 import java.lang.*;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import ch.ost.rj.mge.solarquiz.App;
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
+import ch.ost.rj.mge.solarquiz.fragments.AnswerFragment;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
     TextView questionTextView;
     Random generator;
+    public Integer answerPlacement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,25 +76,19 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         Log.i("hello", Integer.toString(answer) + "answer");
         int step = (int) Math.pow(10, Math.floor(Math.log10(answer)));
         Log.i("hello", Integer.toString(step) + "step");
-        int answerPlacement = generator.nextInt(Math.min(10,answer/step));
+        // contains index of correct answer in seekbar
+        answerPlacement = generator.nextInt(Math.min(10,answer/step));
         Log.i("hello", Integer.toString(answerPlacement) + "answerPlacement");
 
-        /*int[] stepValues = new int[10];
-        int current = answer - answerPlacement * step;
-        for(int i = 0; i < 10; i ++) {
-            stepValues[i] = current;
-            current += step;
-        } */
-        // TODO Set question
         startSliderFragment(step, answer - answerPlacement * step);
-
     }
 
     @Override
     public void onResult(Object result) { // Receives the user input result from the appropriate fragment
-        // TODO
         if(result instanceof Integer) { // Result of slider fragment
-
+            Integer resultInt = (Integer)result;
+            // TODO
+            showAnswerFragment(resultInt.equals(answerPlacement), "This is a test answer");
         }
     }
 
@@ -109,6 +100,13 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         args.putInt("startValue", startValue); // TODO
         slider.setArguments(args);
         ft.replace(R.id.fragmentContainerView, slider);
+        ft.commit();
+    }
+
+    public void showAnswerFragment(boolean correctAnswer, String content) {
+        AnswerFragment answerFragment = AnswerFragment.newInstance(correctAnswer, content);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragmentContainerView, answerFragment);
         ft.commit();
     }
 }
