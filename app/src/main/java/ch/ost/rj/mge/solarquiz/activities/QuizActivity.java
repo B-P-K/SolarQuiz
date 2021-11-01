@@ -25,6 +25,7 @@ import ch.ost.rj.mge.solarquiz.fragments.SingleChoiceFragment;
 import ch.ost.rj.mge.solarquiz.fragments.TextViewFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 import ch.ost.rj.mge.solarquiz.helper.DialogHelper;
+import ch.ost.rj.mge.solarquiz.helper.Status;
 import ch.ost.rj.mge.solarquiz.questions.Question;
 import ch.ost.rj.mge.solarquiz.questions.QuestionGenerator;
 import ch.ost.rj.mge.solarquiz.questions.SingleChoiceQuestion;
@@ -52,8 +53,10 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
     }
 
     public void waitUntilDBSetup(){
-        if(App.db != null && App.db.solarBodyDao().getAll().size() != 0){
+        if(App.status == Status.READY  && App.db.solarBodyDao().getAll().size() != 0){
             showRandomQuestion();
+        } else if (App.status == Status.FAILED){
+            showSorry();
         } else {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -63,6 +66,22 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
                 }
             }, 5);
         }
+    }
+
+    public void showSorry () {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("App unable to function")
+                .setMessage("This app requires an internet connection on its first startup in order to accumulate the necessary solar data. Sorry!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .show();
     }
 
     public void showRandomQuestion() {

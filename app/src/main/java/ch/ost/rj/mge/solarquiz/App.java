@@ -4,6 +4,7 @@ import androidx.room.Room;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,9 +23,11 @@ import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 import ch.ost.rj.mge.solarquiz.helper.JsonHelper;
+import ch.ost.rj.mge.solarquiz.helper.Status;
 
 public class App extends Application {
     public static SolarDatabase db;
+    public static Status status = Status.LOADING;
 
     @Override
     public void onCreate() {
@@ -52,6 +55,13 @@ public class App extends Application {
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
                         Log.e("Error", error.toString());
+                        db = Room.databaseBuilder(getApplicationContext(),
+                                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
+                        if(db.solarBodyDao().getAll().size() != 0){
+                            status = Status.READY;
+                        } else {
+                            status = Status.FAILED;
+                        }
                     }
                 });
         queue.add(request);
@@ -67,5 +77,6 @@ public class App extends Application {
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
         SolarBodyDao solarBodyDao = db.solarBodyDao();
         solarBodyDao.addSolarBodiesWithMoons(solarBodies);
+        status = Status.READY;
     }
 }
