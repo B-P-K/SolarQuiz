@@ -7,7 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.ost.rj.mge.solarquiz.R;
@@ -48,9 +53,17 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         showAnswerDialog(result);
     }
 
+    // TODO Set image based on answer correctness
     public void showAnswerDialog(Question question) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
+        ImageView image = new ImageView(this);
+        // Read your drawable from somewhere
+        Drawable dr = getResources().getDrawable(R.drawable.astronaut_false);
+        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+// Scale it to 50 x 50
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
+        image.setImageDrawable(d);
+        builder.setView(image).setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO Generate next question
