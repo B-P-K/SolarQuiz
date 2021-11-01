@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name of discoverer"
         android:textAlignment="center"
+        android:backgroundTint="@color/yellow_500"
+        android:textCursorDrawable="@color/yellow_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
