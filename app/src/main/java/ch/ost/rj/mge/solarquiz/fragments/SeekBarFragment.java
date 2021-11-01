@@ -47,6 +47,15 @@ public class SeekBarFragment extends Fragment {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             sliderQuestion.setUserGuessPlacement(seekBar.getProgress());
+            int correctAnswer = sliderQuestion.getAnswerValue();
+            int userGuess = sliderQuestion.getUserGuessValue();
+            if (correctAnswer == userGuess) {
+                sliderQuestion.setAnswerTitle("Correct Answer");
+                sliderQuestion.setAnswerText("Your guess " + userGuess + " is correct!");
+            } else {
+                sliderQuestion.setAnswerTitle("Wrong Answer");
+                sliderQuestion.setAnswerText("Your guess was " + userGuess + ". The correct answer is " + correctAnswer + ".");
+            }
             dataPasser.onResult(sliderQuestion);
         }
 
@@ -57,10 +66,9 @@ public class SeekBarFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress,
         boolean fromUser) {
-            //Log.i("hello", Integer.toString(startValue));
-            //Log.i("hello", Integer.toString(stepSize));
-            if(sliderQuestion != null)
-            sbValueTextView.setText(Integer.toString(sliderQuestion.getStartValue() + progress * sliderQuestion.getStepSize()));
+            if(sliderQuestion != null) {
+                sbValueTextView.setText(Integer.toString(sliderQuestion.getStartValue() + progress * sliderQuestion.getStepSize()));
+            }
         }
     };
 

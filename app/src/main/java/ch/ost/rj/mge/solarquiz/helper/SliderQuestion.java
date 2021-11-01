@@ -1,17 +1,21 @@
 package ch.ost.rj.mge.solarquiz.helper;
 
+import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.io.Serializable;
 
-public class SliderQuestion implements Serializable {
+public class SliderQuestion extends Question implements Serializable {
     int startValue;
     int stepSize;
     int answerPlacement;
     int userGuessPlacement;
 
-    public SliderQuestion(int startValue, int stepSize, int answerPlacement) {
+    public SliderQuestion(String questionText, int startValue, int stepSize, int answerPlacement) {
+        this.questionText = questionText;
         this.startValue = startValue;
         this.stepSize = stepSize;
         this.answerPlacement = answerPlacement;
