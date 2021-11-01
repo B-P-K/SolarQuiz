@@ -71,19 +71,15 @@ public class SingleChoiceFragment extends Fragment {
     // TODO
     View.OnClickListener answerButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.singleChoiceBtn1:
-                    singleChoiceQuestion.setUserPressedButtonIndex(0);
-                    break;
-                case R.id.singleChoiceBtn2:
-                    singleChoiceQuestion.setUserPressedButtonIndex(1);
-                    break;
-                case R.id.singleChoiceBtn3:
-                    singleChoiceQuestion.setUserPressedButtonIndex(2);
-                    break;
-                case R.id.singleChoiceBtn4:
-                    singleChoiceQuestion.setUserPressedButtonIndex(3);
-                    break;
+            // Must use if/else rather than switch, as id's are non-final
+            if (v.getId() == R.id.singleChoiceBtn1) {
+                singleChoiceQuestion.setUserPressedButtonIndex(0);
+            } else if (v.getId() == R.id.singleChoiceBtn2){
+                singleChoiceQuestion.setUserPressedButtonIndex(1);
+            } else if (v.getId() == R.id.singleChoiceBtn3) {
+                singleChoiceQuestion.setUserPressedButtonIndex(2);
+            } else if (v.getId() == R.id.singleChoiceBtn4) {
+                singleChoiceQuestion.setUserPressedButtonIndex(3);
             }
             int correctAnswer = singleChoiceQuestion.getCorrectAnswerButtonIndex();
             int userGuess = singleChoiceQuestion.getUserPressedButtonIndex();

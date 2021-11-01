@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import ch.ost.rj.mge.solarquiz.database.SolarBody;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
@@ -81,17 +82,24 @@ public class QuestionGenerator {
 
         for(int i = 0; i < answerChoices.length; i++) {
             int randIndex1;
+            SolarBody s;
             if (i == correctAnswerIndex) {
                 randIndex1 = generator.nextInt(planets.size());
-                answerChoices[i] = planets.get(randIndex1).getBody().getEnglishName();
+                s = planets.get(randIndex1).getBody();
             } else {
                 randIndex1 = generator.nextInt(moons.size());
-                answerChoices[i] = moons.get(randIndex1).getBody().getEnglishName();
+                s = moons.get(randIndex1).getBody();
+            }
+
+            if (s.getEnglishName() != null && !s.getEnglishName().equals("")) {
+                answerChoices[i] = s.getEnglishName();
+            } else { // Some solar bodies do not have an english translation
+                answerChoices[i] = s.getId();
             }
         }
 
         int rand = generator.nextInt(sbm.size());
-        String question = "Which one of these solar bodies is NOT a moon?";
+        String question = "Which one of these solar bodies is a (dwarf) planet?";
         SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(question, correctAnswerIndex, answerChoices);
         return singleChoiceQuestion;
     }
