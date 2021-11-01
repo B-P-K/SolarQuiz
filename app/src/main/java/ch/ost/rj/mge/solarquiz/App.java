@@ -66,8 +66,6 @@ public class App extends Application {
         db = Room.databaseBuilder(getApplicationContext(),
                 SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
         SolarBodyDao solarBodyDao = db.solarBodyDao();
-        for(SolarBodyWithMoons sbc : solarBodies) {
-            solarBodyDao.addSolarBodyWithMoons(sbc);
-        }
+        solarBodyDao.addSolarBodiesWithMoons(solarBodies);
     }
 }

@@ -11,6 +11,14 @@ import java.util.List;
 @Dao
 public abstract class SolarBodyDao {
 
+    @Transaction
+    public void addSolarBodiesWithMoons(List<SolarBodyWithMoons> sbm) {
+        for(SolarBodyWithMoons s : sbm) {
+            addSolarBodyWithMoons(s);
+        }
+    }
+
+    @Transaction
     public void addSolarBodyWithMoons(SolarBodyWithMoons sbm) {
         if(sbm.getMoons() != null) {
             for(Moon moon : sbm.getMoons()) {

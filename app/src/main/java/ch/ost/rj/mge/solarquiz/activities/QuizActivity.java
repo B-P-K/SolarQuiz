@@ -12,10 +12,13 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ch.ost.rj.mge.solarquiz.App;
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.fragments.SingleChoiceFragment;
@@ -39,7 +42,27 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         setContentView(R.layout.activity_quiz);
         questionTextView = findViewById(R.id.questionTextView);
 
-        showRandomQuestion();
+        // FIXME Really ugly hack
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                waitUntilDBSetup();
+            }
+        }, 5);
+    }
+
+    public void waitUntilDBSetup(){
+        if(App.db != null && App.db.solarBodyDao().getAll().size() != 0){
+            showRandomQuestion();
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("hello", "waiting for db to be set up");
+                    waitUntilDBSetup();
+                }
+            }, 5);
+        }
     }
 
     public void showRandomQuestion() {

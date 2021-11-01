@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import ch.ost.rj.mge.solarquiz.App;
 import ch.ost.rj.mge.solarquiz.database.SolarBody;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
@@ -18,9 +19,7 @@ public class QuestionGenerator {
 
     public static SliderQuestion generateSliderQuestion(Context context) {
         generator = new Random();
-        SolarDatabase db = Room.databaseBuilder(context,
-                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
-        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        SolarBodyDao solarBodyDao = App.db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWithMeanRadiusBiggerThan(0);
         // FIXME Empty list returned
         int randOne = generator.nextInt(sbm.size());
@@ -61,9 +60,7 @@ public class QuestionGenerator {
 
     public static TextViewQuestion generateTextViewQuestion(Context context) {
         Random generator = new Random();
-        SolarDatabase db = Room.databaseBuilder(context,
-                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
-        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        SolarBodyDao solarBodyDao = App.db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWhereDiscoveredByIsNotNull();
         int rand = generator.nextInt(sbm.size());
         String discoveredBy= sbm.get(rand).getBody().getDiscoveredBy();
@@ -81,9 +78,7 @@ public class QuestionGenerator {
 
     public static SingleChoiceQuestion generateSingleChoiceQuestion(Context context) {
         Random generator = new Random();
-        SolarDatabase db = Room.databaseBuilder(context,
-                SolarDatabase.class, "solar-db").allowMainThreadQueries().build();
-        SolarBodyDao solarBodyDao = db.solarBodyDao();
+        SolarBodyDao solarBodyDao = App.db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAll();
 
         List<SolarBodyWithMoons> planets = solarBodyDao.getAllBodiesWhereIsPlanet(true);
