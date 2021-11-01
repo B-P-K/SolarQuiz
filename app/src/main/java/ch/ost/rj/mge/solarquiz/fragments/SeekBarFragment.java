@@ -14,23 +14,23 @@ import android.widget.TextView;
 
 import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
+import ch.ost.rj.mge.solarquiz.helper.SliderQuestion;
 
 public class SeekBarFragment extends Fragment {
     SeekBar sb;
     TextView sbValueTextView;
     DataInterface dataPasser;
-    public int stepSize;
-    public int startValue;
+    public static final String ARG_SLIDER_QUESTION = "sliderQuestion";
+    public SliderQuestion sliderQuestion;
 
     public SeekBarFragment() {
         // Required empty public constructor
     }
 
-    public static SeekBarFragment newInstance(int startValue, int stepSize) {
+    public static SeekBarFragment newInstance(SliderQuestion sliderQuestion) {
         SeekBarFragment slider = new SeekBarFragment();
         Bundle args = new Bundle();
-        args.putInt("stepSize", stepSize);
-        args.putInt("startValue", startValue);
+        args.putSerializable(ARG_SLIDER_QUESTION, sliderQuestion);
         slider.setArguments(args);
         return slider;
     }
@@ -39,15 +39,15 @@ public class SeekBarFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            stepSize = getArguments().getInt("stepSize");
-            startValue = getArguments().getInt("startValue");
+            sliderQuestion = (SliderQuestion) getArguments().getSerializable(ARG_SLIDER_QUESTION);
         }
     }
 
     SeekBar.OnSeekBarChangeListener sbl = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            dataPasser.onResult(seekBar.getProgress());
+            sliderQuestion.setUserGuessPlacement(seekBar.getProgress());
+            dataPasser.onResult(sliderQuestion);
         }
 
         @Override
@@ -59,7 +59,8 @@ public class SeekBarFragment extends Fragment {
         boolean fromUser) {
             //Log.i("hello", Integer.toString(startValue));
             //Log.i("hello", Integer.toString(stepSize));
-            sbValueTextView.setText(Integer.toString(startValue + progress * stepSize));
+            if(sliderQuestion != null)
+            sbValueTextView.setText(Integer.toString(sliderQuestion.getStartValue() + progress * sliderQuestion.getStepSize()));
         }
     };
 
@@ -72,7 +73,6 @@ public class SeekBarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_slider, container, false);
         sb = (SeekBar) view.findViewById(R.id.seekBar);
         sbValueTextView = (TextView)view.findViewById(R.id.seekBarValueText);

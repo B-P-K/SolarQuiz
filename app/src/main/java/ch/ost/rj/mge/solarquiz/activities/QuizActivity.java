@@ -22,11 +22,11 @@ import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
+import ch.ost.rj.mge.solarquiz.helper.SliderQuestion;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
     TextView questionTextView;
     Random generator;
-    public Integer answerPlacement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,36 +77,42 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         int step = (int) Math.pow(10, Math.floor(Math.log10(answer)));
         Log.i("hello", Integer.toString(step) + "step");
         // contains index of correct answer in seekbar
-        answerPlacement = generator.nextInt(Math.min(10,answer/step));
+        int answerPlacement = generator.nextInt(Math.min(10,answer/step));
         Log.i("hello", Integer.toString(answerPlacement) + "answerPlacement");
 
-        startSliderFragment(step, answer - answerPlacement * step);
+        SliderQuestion sliderQuestion = new SliderQuestion(answer - answerPlacement * step, step, answerPlacement);
+        startSliderFragment(sliderQuestion);
     }
 
     @Override
     public void onResult(Object result) { // Receives the user input result from the appropriate fragment
-        if(result instanceof Integer) { // Result of slider fragment
-            Integer resultInt = (Integer)result;
-            // TODO
-            //showAnswerFragment(resultInt.equals(answerPlacement), "This is a test answer");
-            showDialog("This is a test answer");
+        if(result instanceof SliderQuestion) { // Result of slider fragment
+            SliderQuestion sliderQuestion = (SliderQuestion)result;
+            int correctAnswer = sliderQuestion.getAnswerValue();
+            int userGuess = sliderQuestion.getUserGuessValue();
+            if (correctAnswer == userGuess) {
+                showDialog("Correct Answer", "Your guess " + userGuess + " is correct!");
+            } else {
+                showDialog("Wrong Answer", "Your guess was " + userGuess + ". The correct answer is " + correctAnswer + ".");
+            }
         }
     }
 
-    public void showDialog(String answer) {
+    public void showDialog(String title, String answer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(answer)
+        builder.setMessage(answer).setTitle(title)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO Generate next question
+                        generateSliderQuestion();
                     }
                 });
         builder.create().show();
     }
 
-    public void startSliderFragment(int stepSize, int startValue) {
+    public void startSliderFragment(SliderQuestion sliderQuestion) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SeekBarFragment slider = SeekBarFragment.newInstance(startValue, stepSize);
+        SeekBarFragment slider = SeekBarFragment.newInstance(sliderQuestion);
         ft.replace(R.id.fragmentContainerView, slider);
         ft.commit();
     }
