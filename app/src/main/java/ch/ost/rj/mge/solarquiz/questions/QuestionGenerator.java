@@ -40,8 +40,16 @@ public class QuestionGenerator {
             sbOne = sbm.get(randTwo);
         }
 
-        String question = "How much bigger is the mean radius of " + sbOne.getBody().getId() + " than that of " +
-                sbTwo.getBody().getId() + "? Round your answer down.";
+        String name1 = sbOne.getBody().getEnglishName();
+        if(name1 == null || name1.equals("")) {
+            name1 = sbOne.getBody().getId();
+        }
+        String name2 = sbTwo.getBody().getEnglishName();
+        if(name2 == null || name2.equals("")) {
+            name2 = sbTwo.getBody().getId();
+        }
+        String question = "How many times could " + name2 + " fit into " +
+                name1 + ", based on its mean radius? Round your answer down.";
 
         int answer = sbOne.getBody().getMeanRadius() / sbTwo.getBody().getMeanRadius();
         int step = (int) Math.pow(10, Math.floor(Math.log10(answer)));
@@ -58,11 +66,15 @@ public class QuestionGenerator {
         SolarBodyDao solarBodyDao = db.solarBodyDao();
         List<SolarBodyWithMoons> sbm = solarBodyDao.getAllWhereDiscoveredByIsNotNull();
         int rand = generator.nextInt(sbm.size());
-        String question = "Who discovered " + sbm.get(rand).getBody().getEnglishName() + "?";
         String discoveredBy= sbm.get(rand).getBody().getDiscoveredBy();
         if (discoveredBy == null || discoveredBy.equals("")) {
             discoveredBy = "no one";
         }
+        String name = sbm.get(rand).getBody().getEnglishName();
+        if(name == null || name.equals("")) {
+            name = sbm.get(rand).getBody().getId();
+        }
+        String question = "Who discovered " + name + "?";
         TextViewQuestion textViewQuestion = new TextViewQuestion(question, discoveredBy);
         return textViewQuestion;
     }
