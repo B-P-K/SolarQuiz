@@ -1,6 +1,7 @@
 package ch.ost.rj.mge.solarquiz.activities;
 
 import java.lang.*;
+import java.util.Random;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,16 +30,31 @@ import ch.ost.rj.mge.solarquiz.questions.TextViewQuestion;
 
 public class QuizActivity extends AppCompatActivity implements DataInterface {
     TextView questionTextView;
+    Random generator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        generator = new Random();
         setContentView(R.layout.activity_quiz);
         questionTextView = findViewById(R.id.questionTextView);
-        // TODO
-        //showSliderQuestion();
-        //showTextViewQuestion();
-        showSingleChoiceQuestion();
+
+        showRandomQuestion();
+    }
+
+    public void showRandomQuestion() {
+        int type = generator.nextInt(3);
+        switch (type) {
+            case 0:
+                showSingleChoiceQuestion();
+                break;
+            case 1:
+                showTextViewQuestion();
+                break;
+            case 2:
+                showSliderQuestion();
+                break;
+        }
     }
 
     public void showSingleChoiceQuestion() {
@@ -64,7 +80,6 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         showAnswerDialog(result);
     }
 
-    // TODO Set image based on answer correctness
     public void showAnswerDialog(Question question) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ImageView astronaut = DialogHelper.getAppropriateAstronautImage(this, question.getDialogTitle());
@@ -72,8 +87,7 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         builder.setView(astronaut).setMessage(question.getDialogText()).setTitle(question.getDialogTitle())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO Generate next question
-                        showSingleChoiceQuestion();
+                        showRandomQuestion(); // Next question
                     }
                 });
         builder.create().show();
