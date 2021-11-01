@@ -3,11 +3,12 @@ package ch.ost.rj.mge.solarquiz.activities;
 import java.util.Random;
 import java.lang.*;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ import ch.ost.rj.mge.solarquiz.R;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyDao;
 import ch.ost.rj.mge.solarquiz.database.SolarBodyWithMoons;
 import ch.ost.rj.mge.solarquiz.database.SolarDatabase;
-import ch.ost.rj.mge.solarquiz.fragments.AnswerFragment;
 import ch.ost.rj.mge.solarquiz.fragments.SeekBarFragment;
 import ch.ost.rj.mge.solarquiz.helper.DataInterface;
 
@@ -88,8 +88,21 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         if(result instanceof Integer) { // Result of slider fragment
             Integer resultInt = (Integer)result;
             // TODO
-            showAnswerFragment(resultInt.equals(answerPlacement), "This is a test answer");
+            //showAnswerFragment(resultInt.equals(answerPlacement), "This is a test answer");
+            showDialog("This is a test answer");
         }
+    }
+
+    public void showDialog(String answer) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(answer)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                    }
+                });
+        // Create the AlertDialog object and return it
+        builder.create().show();
     }
 
     public void startSliderFragment(int stepSize, int startValue) {
@@ -100,13 +113,6 @@ public class QuizActivity extends AppCompatActivity implements DataInterface {
         args.putInt("startValue", startValue); // TODO
         slider.setArguments(args);
         ft.replace(R.id.fragmentContainerView, slider);
-        ft.commit();
-    }
-
-    public void showAnswerFragment(boolean correctAnswer, String content) {
-        AnswerFragment answerFragment = AnswerFragment.newInstance(correctAnswer, content);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentContainerView, answerFragment);
         ft.commit();
     }
 }
