@@ -33,6 +33,9 @@ Usage of the Solar System OpenData API. Requests are sent through Volley.
 ## Solar System OpenData API
 For more information click [here](https://api.le-systeme-solaire.net/en).
 
+## Note of thanks / Disclosure
+A big thanks to my amazing girlfriend for providing the hand drawn pictures astronaut_contemplating, astronaut_true and astronaut_false!
+
 ## Screenshots
 ![Single Choice Question](./Screenshots/SingleChoiceQuestion.jpeg)
 ![Slider Question](./Screenshots/SliderQuestion.jpeg)
